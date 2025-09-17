@@ -1,0 +1,26 @@
+# This is a comment. Lines starting with # are ignored.
+
+# Dependencies
+# This folder contains all third-party libraries.
+/node_modules
+
+# Environment Variables
+# This file contains secrets and should never be committed.
+.env
+
+# Logs
+# Any log files created by your application or tools.
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Operating System generated files
+.DS_Store
+Thumbs.db
+
+# Optional: Production build folders
+# If you were to build your project for production, these folders would be generated.
+/dist
+/build
