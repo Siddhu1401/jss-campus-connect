@@ -22,7 +22,11 @@ app.get('/', (req, res) => {
   res.send('JSS Campus Connect API is running...');
 });
 
-app.use('/api/users', require('./api/user.routes.js'));
+app.post('/api/users/register', (req, res) => {
+    console.log('--- TEST ROUTE WAS HIT ---');
+    res.json({ message: 'Success! The test route in server.js works.' });
+});
+//app.use('/api/users', require('./api/user.routes.js'));
 
 
 app.listen(PORT, () => {
