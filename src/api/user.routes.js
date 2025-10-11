@@ -1,9 +1,13 @@
 // src/api/user.routes.js
 const express = require('express');
 const router = express.Router();
-const { registerUser } = require('../controllers/user.controller.js');
+// Import both functions from the controller
+const { registerUser, loginUser } = require('../controllers/user.controller.js');
 
-// This connects the /register path to our controller logic
+// This is your existing registration route
 router.post('/register', registerUser);
+
+// --- ADD THIS NEW ROUTE FOR LOGIN ---
+router.post('/login', loginUser);
 
 module.exports = router;
