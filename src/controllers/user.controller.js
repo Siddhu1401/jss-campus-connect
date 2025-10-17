@@ -1,10 +1,10 @@
 // src/controllers/user.controller.js
 const pool = require('../config/db');
 const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken'); // <-- This was the missing line
+const jwt = require('jsonwebtoken'); 
 
 const registerUser = async (req, res) => {
-    // ... your existing registerUser function ...
+    
     const { name, email, password, role } = req.body;
     if (!name || !email || !password || !role) { return res.status(400).json({ msg: 'Please enter all fields' }); }
     try {
@@ -64,7 +64,20 @@ const loginUser = async (req, res) => {
     }
 };
 
+const getUserProfile = async (req, res) => {
+    try {
+        const user = await pool.query('SELECT user_id, name, email, role FROM users WHERE user_id = $1', [req.user.id]);
+        
+        res.json(user.rows[0]);
+
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error');
+    }
+};
+
 module.exports = {
     registerUser,
     loginUser,
+    getUserProfile, 
 };

@@ -1,13 +1,15 @@
 // src/api/user.routes.js
 const express = require('express');
 const router = express.Router();
-// Import both functions from the controller
-const { registerUser, loginUser } = require('../controllers/user.controller.js');
+const { registerUser, loginUser, getUserProfile } = require('../controllers/user.controller.js');
+const authMiddleware = require('../middleware/auth.middleware.js'); 
 
-// This is your existing registration route
+// Public routes
 router.post('/register', registerUser);
-
-// --- ADD THIS NEW ROUTE FOR LOGIN ---
 router.post('/login', loginUser);
+
+
+router.get('/me', authMiddleware, getUserProfile);
+
 
 module.exports = router;

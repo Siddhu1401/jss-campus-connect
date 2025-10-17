@@ -6,10 +6,10 @@ const pool = require('./config/db');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
-// This allows our app to accept JSON data from the client
+
 app.use(express.json());
 
-// This block confirms our database is connected on startup
+
 pool.query('SELECT NOW()', (err, res) => {
     if (err) {
         console.error('DATABASE CONNECTION FAILED:', err.stack);
@@ -20,12 +20,11 @@ pool.query('SELECT NOW()', (err, res) => {
 
 const PORT = process.env.PORT || 5000;
 
-// A simple route to check if the API is running
 app.get('/', (req, res) => {
     res.send('JSS Campus Connect API is running...');
 });
 
-// This line connects all our user-related routes
+
 app.use('/api/users', require('./api/user.routes.js'));
 
 app.listen(PORT, () => {
