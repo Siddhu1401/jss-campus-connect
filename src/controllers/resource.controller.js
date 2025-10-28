@@ -25,6 +25,57 @@ const createResource = async (req, res) => {
     }
 };
 
+
+const getAllResources = async (req, res) => {
+    try {
+        // We select all resources and join with the users table to get the uploader's name
+        const allResources = await pool.query(
+            `SELECT r.*, u.name as uploader_name 
+             FROM resources r 
+             JOIN users u ON r.user_id = u.user_id 
+             ORDER BY r.created_at DESC`
+        );
+
+        res.json(allResources.rows);
+
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error');
+    }
+};
+
+const getResourceById = async (req, res) => {
+    try {
+        // We get the ID from the URL parameters (e.g., /api/resources/some-uuid)
+        const { id } = req.params;
+
+        const resource = await pool.query(
+            `SELECT r.*, u.name as uploader_name 
+             FROM resources r 
+             JOIN users u ON r.user_id = u.user_id 
+             WHERE r.resource_id = $1`,
+            [id]
+        );
+
+        // Check if we actually found a resource
+        if (resource.rows.length === 0) {
+            return res.status(404).json({ msg: 'Resource not found' });
+        }
+
+        res.json(resource.rows[0]);
+
+    } catch (err) {
+        console.error(err.message);
+        // This check handles cases where the ID is not a valid UUID format
+        if (err.code === '22P02') {
+             return res.status(404).json({ msg: 'Resource not found (invalid ID)' });
+        }
+        res.status(500).send('Server Error');
+    }
+};
+
 module.exports = {
     createResource,
+    getAllResources,
+    getResourceById,
 };
