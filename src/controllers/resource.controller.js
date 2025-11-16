@@ -111,9 +111,44 @@ const deleteResource = async (req, res) => {
     }
 };
 
+const verifyResource = async (req, res) => {
+    try {
+        const resourceId = req.params.id;
+        
+        // 1. Security Check: Is the user actually a teacher?
+        // req.user comes from the authMiddleware
+        if (req.user.role !== 'teacher') {
+            return res.status(403).json({ msg: 'Access denied. Only teachers can verify resources.' });
+        }
+
+        // 2. Update the resource to set is_verified = true
+        const updatedResource = await pool.query(
+            'UPDATE resources SET is_verified = $1 WHERE resource_id = $2 RETURNING *',
+            [true, resourceId]
+        );
+
+        if (updatedResource.rows.length === 0) {
+            return res.status(404).json({ msg: 'Resource not found' });
+        }
+
+        res.json({
+            msg: 'Resource verified successfully',
+            resource: updatedResource.rows[0]
+        });
+
+    } catch (err) {
+        console.error(err.message);
+        if (err.code === '22P02') {
+             return res.status(404).json({ msg: 'Resource not found (invalid ID)' });
+        }
+        res.status(500).send('Server Error');
+    }
+};
+
 module.exports = {
     createResource,
     getAllResources,
     getResourceById,
     deleteResource,
+    verifyResource, 
 };
