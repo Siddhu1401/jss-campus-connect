@@ -1,6 +1,7 @@
 // server.js
 require('dotenv').config();
 const express = require('express');
+const cors = require('cors');
 const app = express();
 const pool = require('./config/db');
 const bcrypt = require('bcryptjs');
@@ -8,6 +9,7 @@ const jwt = require('jsonwebtoken');
 
 
 app.use(express.json());
+app.use(cors());
 
 
 pool.query('SELECT NOW()', (err, res) => {
