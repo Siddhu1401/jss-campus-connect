@@ -5,7 +5,7 @@ import { attendanceAPI } from '../api/api';
 import '../styles/AttendancePage.css';
 
 const AttendancePage = () => {
-    const { user, logout } = useAuth();
+    const { logout } = useAuth();
     const navigate = useNavigate();
     const [subjects, setSubjects] = useState([]);
     const [loading, setLoading] = useState(false);
